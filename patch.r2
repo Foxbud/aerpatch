@@ -165,6 +165,8 @@ wx 8d 1d 60 0f 00 09 53; so+2
 wx 8d 1d b8 78 aa 09 53; so+2
 # lea ebx, [objectTableHandle]; push ebx
 wx 8d 1d c0 91 a0 09 53; so+2
+# lea ebx, [spriteTable]; push ebx
+wx 8d 1d b0 91 80 09 53; so+2
 # lea ebx, [currentRoom]; push ebx
 wx 8d 1d 38 36 ac 09 53; so+2
 # lea ebx, [currentRoomIndex]; push ebx
@@ -180,7 +182,7 @@ wx 8d 1d 34 55 aa 09 53; so+2
 # lea ebx, [numTicks]; push ebx
 wx 8d 1d 64 ff ab 09 53; so+2
 wa call 0x02005000; so+1 # AERHookInit
-wa add esp, 4 * 13; so+1
+wa add esp, 4 * 14; so+1
 wa jmp 0x011cb70c
 
 # Inject call to thunk.
