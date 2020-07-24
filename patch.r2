@@ -10,37 +10,53 @@ r 0x02100000
 
 
 
-# Move the program header table to 0x0200_0000 and map it to 0x0a04_8000.
-# We need to add new and move existing sections, but to do this we have to
-# define new segments. Unfortunately, the existing program header table
-# doesn't have any more room for segment entries, so we must relocate it.
+# Locations.
+
+# binary virtual offset
+f voff @0x08048000
+
+# original section header table
+f orig.sht @0x017aefd8
+# original dynamic section
+f orig.ds @0x016eee8c
+
+# aer mod section
+f aer @0x02000000
+# new program header table
+f aer.pht @aer
+# new dynamic string table
+f aer.dstrt @aer.pht+0x1000
+
+
+
+# Move the program header table.
 
 # Move program header table contents.
 s 0x34
-yt 0x120 0x02000000
+yt 0x120 aer.pht
 w0 0x120
 
 # Update ELF header.
 s 0x00
-wv4 0x02000000 @+0x1c
+wv4 aer.pht @+0x1c
 wv2 0x000a @+0x2c
 
 # Update program header table entry.
-s 0x02000000
-wv4 0x02000000 @+0x04
-wv4 0x0a048000 @+0x08
-wv4 0x0a048000 @+0x0c
+s aer.pht
+wv4 aer.pht @+0x04
+wv4 aer.pht+voff @+0x08
+wv4 aer.pht+voff @+0x0c
 wv4 0x00000140 @+0x10
 wv4 0x00000140 @+0x14
 
 
 
 # Define new rwx LOAD segment for all mod patch data.
-s 0x02000000+0x20*9
+s aer.pht+0x20*9
 wv4 0x00000001 @+0x00
-wv4 0x02000000 @+0x04
-wv4 0x0a048000 @+0x08
-wv4 0x0a048000 @+0x0c
+wv4 aer @+0x04
+wv4 aer+voff @+0x08
+wv4 aer+voff @+0x0c
 wv4 0x00100000 @+0x10
 wv4 0x00100000 @+0x14
 wv4 0x00000007 @+0x18
@@ -48,23 +64,23 @@ wv4 0x00001000 @+0x1c
 
 
 
-# Move dynamic string table to 0x0200_1000.
+# Move dynamic string table.
 
 # Move dynamic string table contents.
 s 0x00001cf4
-yt 0x150d 0x02001000
+yt 0x150d aer.dstrt
 w0 0x150d
 
 # Update dynamic section entries.
-s 0x016eee8c+0x8*25
-wv4 0x0a049000 @+0x04
-s 0x016eee8c+0x8*27
+s orig.ds+0x8*25
+wv4 aer.dstrt+voff @+0x04
+s orig.ds+0x8*27
 wv4 0x00003000 @+0x04
 
 # Update section header table entry.
-s 0x017aefd8+0x28*6
-wv4 0x0a049000 @+0x0c
-wv4 0x02001000 @+0x10
+s orig.sht+0x28*6
+wv4 aer.dstrt+voff @+0x0c
+wv4 aer.dstrt @+0x10
 wv4 0x00003000 @+0x14
 
 
@@ -153,14 +169,16 @@ wx e9 e0 f3 ff fd
 # Add breakout thunk.
 s 0x02008000
 wa sub esp, 0x27c; so+1
-# lea ebx, [actionSpriteAdd]; push ebx
-wx 8d 1d 50 be fe 08 53; so+2
 # lea ebx, [actionInstanceDestroy]; push ebx
 wx 8d 1d f0 ed 09 09 53; so+2
 # lea ebx, [actionInstanceCreate]; push ebx
 wx 8d 1d e0 72 26 09 53; so+2
+# lea ebx, [actionEventPerform]; push ebx
+wx 8d 1d 20 a5 21 09 53; so+2
 # lea ebx, [actionObjectAdd]; push ebx
 wx 8d 1d 60 0f 00 09 53; so+2
+# lea ebx, [actionSpriteAdd]; push ebx
+wx 8d 1d 50 be fe 08 53; so+2
 # lea ebx, [instanceTable]; push ebx
 wx 8d 1d b8 78 aa 09 53; so+2
 # lea ebx, [objectTableHandle]; push ebx
@@ -182,7 +200,7 @@ wx 8d 1d 34 55 aa 09 53; so+2
 # lea ebx, [numTicks]; push ebx
 wx 8d 1d 64 ff ab 09 53; so+2
 wa call 0x02005000; so+1 # AERHookInit
-wa add esp, 4 * 14; so+1
+wa add esp, 4 * 15; so+1
 wa jmp 0x011cb70c
 
 # Inject call to thunk.
@@ -282,11 +300,7 @@ wa jmp 0x000043f0 # section..plt
 s 0x02009100
 wa call 0x02005020 # AERHookEvent
 so+1
-wa test al, al
-so+1
-wa je 0x011d273c
-so+1
-wa call 0x011d2520 # lookupAndHandleEvent
+wa call 0x011d2520 # actionEventPerform
 so+1
 wa jmp 0x011d273c
 
