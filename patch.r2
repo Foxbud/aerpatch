@@ -300,21 +300,15 @@ wa jmp 0x000043f0 # section..plt
 
 # Add breakout thunk.
 s 0x02009100
-# Perform overwritten code.
-wx c7 45 dc 00 00 00 00; so+1 # mov [ebp+var_24], 0
-# Setup call.
-wa push eax; so+1 # eventNum
-wa push ecx; so+1 # eventType
-wa push edx; so+1 # targetObjectIndex
+# No call setup necessary.
 # Perform call.
 wa call 0x02005020; so+1 # AERHookEvent
-# Cleanup call.
-wa add esp, 4 * 3; so+1
+# No call cleanup necessary.
+# Perform overwritten code.
+wa call 0x012382e0; so+1 # lookupEventWrapper
 # Exit thunk.
-wa jmp 0x11d2551
+wa jmp 0x011d21b0
 
 # Inject call to thunk.
-s 0x11d254a
-wa jmp 0x02009100; so+1
-wa nop; so+1
-wa nop
+s 0x011d21ab
+wa jmp 0x02009100
