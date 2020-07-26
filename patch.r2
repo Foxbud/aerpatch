@@ -173,6 +173,8 @@ wa sub esp, 0x27c; so+1
 wx 8d 1d f0 ed 09 09 53; so+2
 # lea ebx, [actionInstanceCreate]; push ebx
 wx 8d 1d e0 72 26 09 53; so+2
+# lea ebx, [gmlScriptSetdepth]; push ebx
+wx 8d 1d d0 9c fa 08 53; so+2
 # lea ebx, [actionEventPerform]; push ebx
 wx 8d 1d 20 a5 21 09 53; so+2
 # lea ebx, [actionObjectAdd]; push ebx
@@ -200,7 +202,7 @@ wx 8d 1d 34 55 aa 09 53; so+2
 # lea ebx, [numTicks]; push ebx
 wx 8d 1d 64 ff ab 09 53; so+2
 wa call 0x02005000; so+1 # AERHookInit
-wa add esp, 4 * 15; so+1
+wa add esp, 4 * 16; so+1
 wa jmp 0x011cb70c
 
 # Inject call to thunk.
