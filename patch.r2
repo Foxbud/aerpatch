@@ -1,6 +1,8 @@
 # AER Mod Patch
 #
 # Install using "r2 -nwqi patch.r2 HyperLightDrifter"
+e asm.arch = x86
+e asm.bits = 32
 
 
 
@@ -168,19 +170,17 @@ wx e9 e0 f3 ff fd
 
 # Add breakout thunk.
 s 0x02008000
+# Perform overwritten code.
 wa sub esp, 0x27c; so+1
-# lea ebx, [actionInstanceDestroy]; push ebx
-wx 8d 1d f0 ed 09 09 53; so+2
-# lea ebx, [actionInstanceCreate]; push ebx
-wx 8d 1d e0 72 26 09 53; so+2
-# lea ebx, [gmlScriptSetdepth]; push ebx
-wx 8d 1d d0 9c fa 08 53; so+2
-# lea ebx, [actionEventPerform]; push ebx
-wx 8d 1d 20 a5 21 09 53; so+2
-# lea ebx, [actionObjectAdd]; push ebx
-wx 8d 1d 60 0f 00 09 53; so+2
-# lea ebx, [actionSpriteAdd]; push ebx
-wx 8d 1d 50 be fe 08 53; so+2
+# Setup call.
+wa push 0x0909edf0; so+1 # actionInstanceDestroy
+wa push 0x092672e0; so+1 # actionInstanceCreate
+wa push 0x08fa9cd0; so+1 # gmlScriptSetdepth
+wa push 0x0921a520; so+1 # actionEventPerform
+wa push 0x09000f60; so+1 # actionObjectAdd
+wa push 0x08febe50; so+1 # actionSpriteAdd
+wa push 0x09ac4bbc; so+1 # alarmEventSubscribers
+wa push 0x09acbbb8; so+1 # alarmEventSubscriberSizes
 # lea ebx, [instanceTable]; push ebx
 wx 8d 1d b8 78 aa 09 53; so+2
 # lea ebx, [objectTableHandle]; push ebx
@@ -201,8 +201,11 @@ wx 8d 1d 34 53 aa 09 53; so+2
 wx 8d 1d 34 55 aa 09 53; so+2
 # lea ebx, [numTicks]; push ebx
 wx 8d 1d 64 ff ab 09 53; so+2
+# Perform call.
 wa call 0x02005000; so+1 # AERHookInit
-wa add esp, 4 * 16; so+1
+# Cleanup call.
+wa add esp, 4 * 18; so+1
+# Exit thunk.
 wa jmp 0x011cb70c
 
 # Inject call to thunk.
