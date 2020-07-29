@@ -120,7 +120,7 @@ wv4 0x00002f90 @+0x14
 
 # Add dynamic string.
 s 0x02002510
-wz aermre.so
+wz libaermre.so
 
 # Add dynamic section entry.
 s 0x016eee8c+0x08*40
@@ -179,32 +179,24 @@ wa push 0x08fa9cd0; so+1 # gmlScriptSetdepth
 wa push 0x0921a520; so+1 # actionEventPerform
 wa push 0x09000f60; so+1 # actionObjectAdd
 wa push 0x08febe50; so+1 # actionSpriteAdd
+wa push 0x09ac53bc; so+1 # stepEventSubscribers
+wa push 0x09acbfb8; so+1 # stepEventSubscriberCounts
 wa push 0x09ac4bbc; so+1 # alarmEventSubscribers
-wa push 0x09acbbb8; so+1 # alarmEventSubscriberSizes
-# lea ebx, [instanceTable]; push ebx
-wx 8d 1d b8 78 aa 09 53; so+2
-# lea ebx, [objectTableHandle]; push ebx
-wx 8d 1d c0 91 a0 09 53; so+2
-# lea ebx, [spriteTable]; push ebx
-wx 8d 1d b0 91 80 09 53; so+2
-# lea ebx, [currentRoom]; push ebx
-wx 8d 1d 38 36 ac 09 53; so+2
-# lea ebx, [currentRoomIndex]; push ebx
-wx 8d 1d 6c 36 ac 09 53; so+2
-# lea ebx, [numRooms]; push ebx
-wx 8d 1d 08 c9 ab 09 53; so+2
-# lea ebx, [keysReleasedTable]; push ebx
-wx 8d 1d 34 54 aa 09 53; so+2
-# lea ebx, [keysHeldTable]; push ebx
-wx 8d 1d 34 53 aa 09 53; so+2
-# lea ebx, [keysPressedTable]; push ebx
-wx 8d 1d 34 55 aa 09 53; so+2
-# lea ebx, [numTicks]; push ebx
-wx 8d 1d 64 ff ab 09 53; so+2
+wa push 0x09acbbb8; so+1 # alarmEventSubscriberCounts
+wa push 0x09aa78b8; so+1 # instanceTable
+wa push 0x09a091c0; so+1 # objectTableHandle
+wa push 0x098091b0; so+1 # spriteTable
+wa push 0x09ac3638; so+1 # currentRoom
+wa push 0x09ac366c; so+1 # currentRoomIndex
+wa push 0x09abc908; so+1 # roomTable
+wa push 0x09aa5434; so+1 # keysReleasedTable
+wa push 0x09aa5334; so+1 # keysHeldTable
+wa push 0x09aa5534; so+1 # keysPressedTable
+wa push 0x09abff64; so+1 # numSteps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 18; so+1
+wa add esp, 4 * 20; so+1
 # Exit thunk.
 wa jmp 0x011cb70c
 
