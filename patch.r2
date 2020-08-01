@@ -171,9 +171,14 @@ wx e9 e0 f3 ff fd
 # Add breakout thunk.
 s 0x02008000
 # Perform overwritten code.
-wa sub esp, 0x27c; so+1
+wx c6 85 57 ff ff ff 00; so+1 # mov dword [ebp+var_a9], 0
 # Setup call.
+wa push 0x09063840; so+1 # Instance_setMaskIndex
+wa push 0x09066140; so+1 # actionMotionAdd
+wa push 0x090641d0; so+1 # Instance_setDirection
+wa push 0x09064290; so+1 # Instance_setSpeed
 wa push 0x0909edf0; so+1 # actionInstanceDestroy
+wa push 0x092679a0; so+1 # actionInstanceChange
 wa push 0x092672e0; so+1 # actionInstanceCreate
 wa push 0x08fa9cd0; so+1 # gmlScriptSetdepth
 wa push 0x0921a520; so+1 # actionEventPerform
@@ -196,23 +201,23 @@ wa push 0x09abff64; so+1 # numSteps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 20; so+1
+wa add esp, 4 * 25; so+1
 # Exit thunk.
-wa jmp 0x011cb70c
+wa jmp 0x011cb944
 
 # Inject call to thunk.
-s 0x011cb706
-wa jmp 0x02008000
-so+1
+s 0x011cb93d # Instruction before game loop.
+wa jmp 0x02008000; so+1
+wa nop; so+1
 wa nop
 
 
 
-# Add mod runtime environment update hook.
+# Add mod runtime environment step hook.
 
 # Add dynamic string.
 s 0x02002550
-wz AERHookUpdate
+wz AERHookStep
 
 # Add dynamic symbol.
 s 0x00000264+0x10*0x1ad
@@ -246,14 +251,17 @@ wx e9 d0 f3 ff fd
 
 # Add breakout thunk.
 s 0x02009000
-wa call 0x02005010 # AERHookUpdate
-so+1
-wa call 0x01219830 # gameTick
-so+1
-wa jmp 0x011cbf89
+# No call setup necessary.
+# Perform call.
+wa call 0x02005010; so+1 # AERHookStep
+# No call cleanup necessary.
+# Perform overwritten code.
+wa call 0x01219260; so+1 # updateInstances
+# Exit thunk.
+wa jmp 0x01219dd9
 
 # Inject call to thunk.
-s 0x011cbf84
+s 0x01219dd4
 wa jmp 0x02009000
 
 
