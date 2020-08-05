@@ -173,10 +173,8 @@ s 0x02008000
 # Perform overwritten code.
 wx c6 85 57 ff ff ff 00; so+1 # mov dword [ebp+var_a9], 0
 # Setup call.
+wa push 0x090631b0; so+1 # Instance_setMotionPolarFromCartesian
 wa push 0x09063840; so+1 # Instance_setMaskIndex
-wa push 0x09066140; so+1 # actionMotionAdd
-wa push 0x090641d0; so+1 # Instance_setDirection
-wa push 0x09064290; so+1 # Instance_setSpeed
 wa push 0x0909edf0; so+1 # actionInstanceDestroy
 wa push 0x092679a0; so+1 # actionInstanceChange
 wa push 0x092672e0; so+1 # actionInstanceCreate
@@ -201,7 +199,7 @@ wa push 0x09abff64; so+1 # numSteps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 25; so+1
+wa add esp, 4 * 23; so+1
 # Exit thunk.
 wa jmp 0x011cb944
 
