@@ -1,6 +1,6 @@
 SHELL = /bin/sh
 .SUFFIXES:
-.SUFFIXES: .r2 .patch
+.SUFFIXES: .r2
 
 
 
