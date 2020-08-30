@@ -173,22 +173,25 @@ s 0x02008000
 # Perform overwritten code.
 wx c6 85 57 ff ff ff 00; so+1 # mov dword [ebp+var_a9], 0
 # Setup call.
+# Function references.
+wa push 0x08fa9cd0; so+1 # gmlScriptSetdepth
 wa push 0x090631b0; so+1 # Instance_setMotionPolarFromCartesian
 wa push 0x09063840; so+1 # Instance_setMaskIndex
 wa push 0x0909edf0; so+1 # actionInstanceDestroy
 wa push 0x092679a0; so+1 # actionInstanceChange
 wa push 0x092672e0; so+1 # actionInstanceCreate
-wa push 0x08fa9cd0; so+1 # gmlScriptSetdepth
 wa push 0x0921a520; so+1 # actionEventPerform
 wa push 0x09000f60; so+1 # actionObjectAdd
+wa push 0x08fec740; so+1 # actionSpriteReplace
 wa push 0x08febe50; so+1 # actionSpriteAdd
+# Global references.
 wa push 0x09ac53bc; so+1 # stepEventSubscribers
 wa push 0x09acbfb8; so+1 # stepEventSubscriberCounts
 wa push 0x09ac4bbc; so+1 # alarmEventSubscribers
 wa push 0x09acbbb8; so+1 # alarmEventSubscriberCounts
 wa push 0x09aa78b8; so+1 # instanceTable
 wa push 0x09a091c0; so+1 # objectTableHandle
-wa push 0x098091b0; so+1 # spriteTable
+wa push 0x098091ac; so+1 # spriteTable
 wa push 0x09ac3638; so+1 # currentRoom
 wa push 0x09ac366c; so+1 # currentRoomIndex
 wa push 0x09abc908; so+1 # roomTable
@@ -199,7 +202,7 @@ wa push 0x09abff64; so+1 # numSteps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 23; so+1
+wa add esp, 4 * 24; so+1
 # Exit thunk.
 wa jmp 0x011cb944
 
