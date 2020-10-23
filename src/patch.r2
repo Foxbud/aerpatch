@@ -184,6 +184,7 @@ wa push 0x0921a520; so+1 # actionEventPerform
 wa push 0x09000f60; so+1 # actionObjectAdd
 wa push 0x08fec740; so+1 # actionSpriteReplace
 wa push 0x08febe50; so+1 # actionSpriteAdd
+wa push 0x09267e00; so+1 # actionRoomGoto
 # Global references.
 wa push 0x09ac53bc; so+1 # stepEventSubscribers
 wa push 0x09acbfb8; so+1 # stepEventSubscriberCounts
@@ -202,7 +203,7 @@ wa push 0x09abff64; so+1 # numSteps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 24; so+1
+wa add esp, 4 * 25; so+1
 # Exit thunk.
 wa jmp 0x011cb944
 
