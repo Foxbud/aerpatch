@@ -190,6 +190,7 @@ wa push 0x09ac53bc; so+1 # stepEventSubscribers
 wa push 0x09acbfb8; so+1 # stepEventSubscriberCounts
 wa push 0x09ac4bbc; so+1 # alarmEventSubscribers
 wa push 0x09acbbb8; so+1 # alarmEventSubscriberCounts
+wa push 0x09809028; so+1 # instanceLocalTable
 wa push 0x09aa78b8; so+1 # instanceTable
 wa push 0x09a091c0; so+1 # objectTableHandle
 wa push 0x098091ac; so+1 # spriteTable
@@ -203,7 +204,7 @@ wa push 0x09abff64; so+1 # numSteps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 25; so+1
+wa add esp, 4 * 26; so+1
 # Exit thunk.
 wa jmp 0x011cb944
 
