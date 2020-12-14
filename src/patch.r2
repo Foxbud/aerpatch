@@ -200,6 +200,11 @@ wa push 0x098091ac; so+1 # spriteTable
 wa push 0x09ac3638; so+1 # currentRoom
 wa push 0x09ac366c; so+1 # currentRoomIndex
 wa push 0x09abc908; so+1 # roomTable
+wa push 0x09aa564c; so+1 # mousePosY
+wa push 0x09aa5648; so+1 # mousePosX
+wa push 0x09aa563f; so+1 # mouseButtonsReleasedTable
+wa push 0x09aa563c; so+1 # mouseButtonsHeldTable
+wa push 0x09aa5642; so+1 # mouseButtonsPressedTable
 wa push 0x09aa5434; so+1 # keysReleasedTable
 wa push 0x09aa5334; so+1 # keysHeldTable
 wa push 0x09aa5534; so+1 # keysPressedTable
@@ -207,7 +212,7 @@ wa push 0x09abff64; so+1 # numSteps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 29; so+1
+wa add esp, 4 * 34; so+1
 # Exit thunk.
 wa jmp 0x011cb944
 
