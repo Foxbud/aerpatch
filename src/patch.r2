@@ -108,7 +108,7 @@ wv4 0x00000ce8 @+0x14
 
 
 
-# Expand dynamic symbol table to accound for new hooks.
+# Expand dynamic symbol table to account for new hooks.
 
 # Update section header table entry.
 s 0x17aefd8+0x28*5
