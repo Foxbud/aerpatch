@@ -326,7 +326,7 @@ wx 68 e0 0c 00 00
 so+1
 wa jmp 0x000043f0 # section..plt
 
-# Add breakout thunk.
+# Add breakout thunk 1.
 s 0x02009100
 # No call setup necessary.
 # Perform call.
@@ -337,6 +337,21 @@ wa call 0x012382e0; so+1 # lookupEventWrapper
 # Exit thunk.
 wa jmp 0x011d21b0
 
-# Inject call to thunk.
+# Add breakout thunk 2.
+s 0x0200910f
+# No call setup necessary.
+# Perform call.
+wa call 0x02005020; so+1 # AERHookEvent
+# No call cleanup necessary.
+# Perform overwritten code.
+wa call 0x012382e0; so+1 # lookupEventWrapper
+# Exit thunk.
+wa jmp 0x011d22ed
+
+# Inject call to thunk 1.
 s 0x011d21ab
 wa jmp 0x02009100
+
+# Inject call to thunk 2.
+s 0x011d22e8
+wa jmp 0x0200910f
