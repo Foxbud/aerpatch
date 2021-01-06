@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2020 the aerpatch authors
+# Copyright 2021 the aerpatch authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
