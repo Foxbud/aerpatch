@@ -191,6 +191,7 @@ wx c6 85 57 ff ff ff 00; so+1 # mov dword [ebp+var_a9], 0
 wa push 0x08fa9cd0; so+1 # gmlScriptSetdepth
 wa push 0x090631b0; so+1 # Instance_setMotionPolarFromCartesian
 wa push 0x09063840; so+1 # Instance_setMaskIndex
+wa push 0x090660a0; so+1 # Instance_setPosition
 wa push 0x0909edf0; so+1 # actionInstanceDestroy
 wa push 0x092679a0; so+1 # actionInstanceChange
 wa push 0x092672e0; so+1 # actionInstanceCreate
@@ -226,7 +227,7 @@ wa push 0x09abff64; so+1 # numSteps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 34; so+1
+wa add esp, 4 * 35; so+1
 # Exit thunk.
 wa jmp 0x011cb944
 

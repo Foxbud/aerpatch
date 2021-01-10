@@ -56,7 +56,7 @@ rsync --only-write-batch="$_BUILDDIR/$_EXECDIFF" "$_BUILDDIR/$_MODEXEC" "$_GAMED
 
 # Stage build.
 mkdir -p "$_STAGEDIR"
-cp -t "$_STAGEDIR" "$_BUILDDIR/$_EXECDIFF" "$_PRJDIR/AUTHORS" "$_PRJDIR/LICENSE"
+cp -t "$_STAGEDIR" "$_BUILDDIR/$_EXECDIFF" "$_PRJDIR/AUTHORS.txt" "$_PRJDIR/LICENSE.txt" "$_PRJDIR/NOTICE.txt"
 
 # Package build.
 tar -C "$_BUILDDIR" -acf "$_PKGFILE" "$_STAGEDIR_REL"
