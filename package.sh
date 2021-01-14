@@ -48,19 +48,28 @@ _EXECDIFF="${_ORIGEXEC}Diff"
 rm -rf "$_BUILDDIR"
 mkdir -p "$_BUILDDIR"
 
+# Create checksum for original executable.
+pushd "$_GAMEDIR" >/dev/null
+sha256sum --tag "$_ORIGEXEC" >"$_BUILDDIR/$_ORIGEXEC.checksum.txt"
+popd >/dev/null
+
 # Get clean copy of original executable.
-rm -f "$_BUILDDIR/$_ORIGEXEC"
 cp "$_GAMEDIR/$_ORIGEXEC" "$_BUILDDIR/$_MODEXEC"
 
 # Patch executable.
 r2 -nwqi "$_SRCDIR/patch.r2" "$_BUILDDIR/$_MODEXEC"
+
+# Create checksum for patched executable.
+pushd "$_BUILDDIR" >/dev/null
+sha256sum --tag "$_MODEXEC" >"$_BUILDDIR/$_MODEXEC.checksum.txt"
+popd >/dev/null
 
 # Create diff file.
 rsync --only-write-batch="$_BUILDDIR/$_EXECDIFF" "$_BUILDDIR/$_MODEXEC" "$_GAMEDIR/$_ORIGEXEC"
 
 # Stage build.
 mkdir -p "$_STAGEDIR"
-cp -t "$_STAGEDIR" "$_BUILDDIR/$_EXECDIFF" "$_PRJDIR/AUTHORS.txt" "$_PRJDIR/LICENSE.txt" "$_PRJDIR/NOTICE.txt"
+cp -t "$_STAGEDIR" "$_BUILDDIR/$_EXECDIFF" "$_BUILDDIR/$_ORIGEXEC.checksum.txt" "$_BUILDDIR/$_MODEXEC.checksum.txt" "$_PRJDIR/AUTHORS.txt" "$_PRJDIR/LICENSE.txt" "$_PRJDIR/NOTICE.txt"
 
 # Create VERSION.txt file.
 echo "$_VERSION" >"$_STAGEDIR/VERSION.txt"
