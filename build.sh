@@ -17,7 +17,11 @@
 
 # Constants.
 
-_VERSION="$(date -u +'%Y%m%d')"
+_POSTREL=$1
+if [ $# -lt 1 ]; then
+	_POSTREL=0
+fi
+_VERSION="$(date -u +'%Y%m%d')-$_POSTREL"
 
 _SCRIPT="$(realpath "$0")"
 
@@ -57,6 +61,9 @@ rsync --only-write-batch="$_BUILDDIR/$_EXECDIFF" "$_BUILDDIR/$_MODEXEC" "$_GAMED
 # Stage build.
 mkdir -p "$_STAGEDIR"
 cp -t "$_STAGEDIR" "$_BUILDDIR/$_EXECDIFF" "$_PRJDIR/AUTHORS.txt" "$_PRJDIR/LICENSE.txt" "$_PRJDIR/NOTICE.txt"
+
+# Create VERSION.txt file.
+echo "$_VERSION" >"$_STAGEDIR/VERSION.txt"
 
 # Package build.
 tar -C "$_BUILDDIR" -acf "$_PKGFILE" "$_STAGEDIR_REL"
