@@ -17,11 +17,11 @@
 
 # Constants.
 
-_POSTREL=$1
-if [ $# -lt 1 ]; then
-	_POSTREL=0
+_POSTREL=""
+if [ $# -eq 1 ]; then
+	_POSTREL="-$1"
 fi
-_VERSION="$(date -u +'%Y%m%d')-$_POSTREL"
+_VERSION="$(date -u +'%Y%m%d')$_POSTREL"
 
 _SCRIPT="$(realpath "$0")"
 
