@@ -34,7 +34,7 @@ _BUILDDIR="$_PRJDIR/build"
 _STAGEDIR_REL="aerpatch-$_VERSION"
 _STAGEDIR="$_BUILDDIR/$_STAGEDIR_REL"
 
-_PKGFILE="$_BUILDDIR/aerpatch-$_VERSION.tar.gz"
+_PKGFILE="$_BUILDDIR/aerpatch-$_VERSION.tar.xz"
 
 _GAMEDIR="$HOME/.local/share/Steam/steamapps/common/HyperLightDrifter"
 
