@@ -42,6 +42,8 @@ _ORIGEXEC="HyperLightDrifter"
 _MODEXEC="${_ORIGEXEC}Patched"
 _EXECDIFF="${_ORIGEXEC}Diff"
 
+_RSYNC="rsync-3.1.0"
+
 
 
 # Prepare build dir.
@@ -65,7 +67,7 @@ sha256sum --tag "$_MODEXEC" >"$_BUILDDIR/$_MODEXEC.checksum.txt"
 popd >/dev/null
 
 # Create diff file.
-rsync --only-write-batch="$_BUILDDIR/$_EXECDIFF" "$_BUILDDIR/$_MODEXEC" "$_GAMEDIR/$_ORIGEXEC"
+"$_RSYNC" --only-write-batch="$_BUILDDIR/$_EXECDIFF" "$_BUILDDIR/$_MODEXEC" "$_GAMEDIR/$_ORIGEXEC"
 
 # Stage build.
 mkdir -p "$_STAGEDIR"
