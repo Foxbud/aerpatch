@@ -195,6 +195,10 @@ wa push 0x090660a0; so+1 # Instance_setPosition
 wa push 0x0909edf0; so+1 # actionInstanceDestroy
 wa push 0x092679a0; so+1 # actionInstanceChange
 wa push 0x092672e0; so+1 # actionInstanceCreate
+wa push 0x090d3fa0; so+1 # actionDrawSelf
+wa push 0x0912a330; so+1 # actionDrawText
+wa push 0x0910c770; so+1 # actionDrawRectangle
+wa push 0x0910bf80; so+1 # actionDrawTriangle
 wa push 0x0921a520; so+1 # actionEventPerform
 wa push 0x09000f60; so+1 # actionObjectAdd
 wa push 0x08fec740; so+1 # actionSpriteReplace
@@ -227,7 +231,7 @@ wa push 0x09abff64; so+1 # numSteps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 35; so+1
+wa add esp, 4 * 39; so+1
 # Exit thunk.
 wa jmp 0x011cb944
 
