@@ -195,12 +195,14 @@ wa push 0x090660a0; so+1 # Instance_setPosition
 wa push 0x0909edf0; so+1 # actionInstanceDestroy
 wa push 0x092679a0; so+1 # actionInstanceChange
 wa push 0x092672e0; so+1 # actionInstanceCreate
+wa push 0x091291d0; so+1 # actionDrawSetFont
 wa push 0x090d3fa0; so+1 # actionDrawSelf
 wa push 0x0912a330; so+1 # actionDrawText
 wa push 0x0910c770; so+1 # actionDrawRectangle
 wa push 0x0910bf80; so+1 # actionDrawTriangle
 wa push 0x0921a520; so+1 # actionEventPerform
 wa push 0x09000f60; so+1 # actionObjectAdd
+wa push 0x09031580; so+1 # actionFontAdd
 wa push 0x08fec740; so+1 # actionSpriteReplace
 wa push 0x08febe50; so+1 # actionSpriteAdd
 wa push 0x09267e00; so+1 # actionRoomGoto
@@ -215,6 +217,9 @@ wa push 0x09acbbb8; so+1 # alarmEventSubscriberCounts
 wa push 0x09809028; so+1 # instanceLocalTable
 wa push 0x09aa78b8; so+1 # instanceTable
 wa push 0x09a091c0; so+1 # objectTableHandle
+wa push 0x09ab3b34; so+1 # currentFont
+wa push 0x09772b94; so+1 # currentFontIndex
+wa push 0x09aa1d6c; so+1 # fontTable
 wa push 0x098091ac; so+1 # spriteTable
 wa push 0x09ac3638; so+1 # currentRoom
 wa push 0x09ac366c; so+1 # currentRoomIndex
@@ -231,7 +236,7 @@ wa push 0x09abff64; so+1 # numSteps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 39; so+1
+wa add esp, 4 * 44; so+1
 # Exit thunk.
 wa jmp 0x011cb944
 
