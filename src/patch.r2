@@ -371,3 +371,111 @@ wa jmp 0x02009100
 # Inject call to thunk 2.
 s 0x011d22e8
 wa jmp 0x0200910f
+
+
+
+# Add mod runtime environment load data hook.
+
+# Add dynamic string.
+s 0x02002590
+wz AERHookLoadData
+
+# Add dynamic symbol.
+s 0x00000264+0x10*0x1af
+wv4 0x00001590 @+0x00
+wv4 0x0a04d030 @+0x04
+wv4 0x00000000 @+0x08
+wv1 0x12 @+0x0c
+wv1 0x00 @+0x0d
+wv2 0x0000 @+0x0e
+
+# Add PLT relocation table entry.
+s 0x0200b000+0xce8
+wv4 0x0a04c00c @+0x00
+wv4 0x0001af00 @+0x04
+wv1 0x07 @+0x04
+
+# Add GOT PLT entry.
+s 0x0200400c
+wv4 0x0a04d036
+
+# Add PLT entry.
+s 0x02005030
+# jmp dword [0x0a04c00c]
+wx ff 25 0c c0 04 0a
+so+1
+# push 0xce8
+wx 68 e8 0c 00 00
+so+1
+wa jmp 0x000043f0 # section..plt
+
+# Add breakout thunk.
+s 0x02009200
+# Perform overwritten code.
+wa call 0x00f88140; so+1 # loadMapSecure
+# Setup call.
+wa push eax; so+1 # data map index
+# Perform call.
+wa call 0x02005030; so+1 # AERHookLoadData
+# Cleanup call.
+wa pop eax; so+1
+# Exit thunk.
+wa jmp 0x00dd822b;
+
+# Inject call to thunk.
+s 0x0x00dd8226
+wa jmp 0x02009200
+
+
+
+# Add mod runtime environment save data hook.
+
+# Add dynamic string.
+s 0x020025b0
+wz AERHookSaveData
+
+# Add dynamic symbol.
+s 0x00000264+0x10*0x1b0
+wv4 0x000015b0 @+0x00
+wv4 0x0a04d040 @+0x04
+wv4 0x00000000 @+0x08
+wv1 0x12 @+0x0c
+wv1 0x00 @+0x0d
+wv2 0x0000 @+0x0e
+
+# Add PLT relocation table entry.
+s 0x0200b000+0xcf0
+wv4 0x0a04c010 @+0x00
+wv4 0x0001b000 @+0x04
+wv1 0x07 @+0x04
+
+# Add GOT PLT entry.
+s 0x02004010
+wv4 0x0a04d046
+
+# Add PLT entry.
+s 0x02005040
+# jmp dword [0x0a04c010]
+wx ff 25 10 c0 04 0a
+so+1
+# push 0xcf0
+wx 68 f0 0c 00 00
+so+1
+wa jmp 0x000043f0 # section..plt
+
+# Add breakout thunk.
+s 0x02009300
+# Setup call.
+wa push [esi]; so+1 # data map index
+# Perform call.
+wa call 0x02005040; so+1 # AERHookSaveData
+# Cleanup call.
+wa add esp, 4 * 1; so+1
+# Perform overwritten code.
+wa call 0x00f88140; so+1 # saveMapSecure
+# Exit thunk.
+wa jmp 0x00e75d4d;
+
+# Inject call to thunk.
+s 0x0x00e75d48
+wa jmp 0x02009300
