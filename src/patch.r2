@@ -188,9 +188,11 @@ s 0x02008000
 wx c6 85 57 ff ff ff 00; so+1 # mov dword [ebp+var_a9], 0
 # Setup call.
 # Function references.
-wa push 0x08f2ce00; so+1 # gmlScriptValueRecord
-wa push 0x08f2c300; so+1 # gmlScriptValueCheck
 wa push 0x08fa9cd0; so+1 # gmlScriptSetdepth
+wa push 0x090c01c0; so+1 # API_dsMapAddMap
+wa push 0x090bfa00; so+1 # API_dsMapSet
+wa push 0x090c12a0; so+1 # API_dsMapFindValue
+wa push 0x090bf010; so+1 # API_dsMapCreate
 wa push 0x090631b0; so+1 # Instance_setMotionPolarFromCartesian
 wa push 0x09063840; so+1 # Instance_setMaskIndex
 wa push 0x090660a0; so+1 # Instance_setPosition
@@ -209,7 +211,6 @@ wa push 0x09000f60; so+1 # actionObjectAdd
 wa push 0x09031580; so+1 # actionFontAdd
 wa push 0x08fec740; so+1 # actionSpriteReplace
 wa push 0x08febe50; so+1 # actionSpriteAdd
-wa push 0x0901cfa0; so+1 # actionMapDelete
 wa push 0x09267e00; so+1 # actionRoomGoto
 # Global references.
 wa push 0x09518c19; so+1 # unknownEventAddress
@@ -242,7 +243,7 @@ wa push 0x09aa7fe0; so+1 # maps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 50; so+1
+wa add esp, 4 * 51; so+1
 # Exit thunk.
 wa jmp 0x011cb944
 
