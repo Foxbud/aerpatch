@@ -204,6 +204,8 @@ wa push 0x090d3fa0; so+1 # actionDrawSelf
 wa push 0x0912a330; so+1 # actionDrawText
 wa push 0x0910c770; so+1 # actionDrawRectangle
 wa push 0x0910bf80; so+1 # actionDrawTriangle
+wa push 0x0910d1d0; so+1 # actionDrawEllipse
+wa push 0x0910b9f0; so+1 # actionDrawLine
 wa push 0x0910ae40; so+1 # actionDrawSetAlpha
 wa push 0x0910b080; so+1 # actionDrawGetAlpha
 wa push 0x0921a520; so+1 # actionEventPerform
