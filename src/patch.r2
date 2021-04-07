@@ -247,7 +247,7 @@ wa push 0x09aa7fe0; so+1 # maps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 53; so+1
+wa add esp, 4 * 55; so+1
 # Exit thunk.
 wa jmp 0x011cb944
 
