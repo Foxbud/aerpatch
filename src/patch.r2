@@ -211,6 +211,7 @@ wa push 0x0910b080; so+1 # actionDrawGetAlpha
 wa push 0x0921a520; so+1 # actionEventPerform
 wa push 0x09000f60; so+1 # actionObjectAdd
 wa push 0x09031580; so+1 # actionFontAdd
+wa push 0x09271b30; so+1 # actionAudioPlaySound
 wa push 0x08fec740; so+1 # actionSpriteReplace
 wa push 0x08febe50; so+1 # actionSpriteAdd
 wa push 0x09267e00; so+1 # actionRoomGoto
@@ -230,6 +231,9 @@ wa push 0x09a091c0; so+1 # objectTableHandle
 wa push 0x09ab3b34; so+1 # currentFont
 wa push 0x09772b94; so+1 # currentFontIndex
 wa push 0x09aa1d6c; so+1 # fontTable
+wa push 0x09ac3884; so+1 # sampleNameTable
+wa push 0x09ac387c; so+1 # sampleTable
+wa push 0x09ac384c; so+1 # nextPlaybackId
 wa push 0x098091ac; so+1 # spriteTable
 wa push 0x09ac3638; so+1 # currentRoom
 wa push 0x09ac366c; so+1 # currentRoomIndex
@@ -247,7 +251,7 @@ wa push 0x09aa7fe0; so+1 # maps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 55; so+1
+wa add esp, 4 * 59; so+1
 # Exit thunk.
 wa jmp 0x011cb944
 
