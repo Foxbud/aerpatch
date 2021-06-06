@@ -223,6 +223,7 @@ wa push 0x0910c770; so+1 # actionDrawRectangle
 wa push 0x0910bf80; so+1 # actionDrawTriangle
 wa push 0x0910d1d0; so+1 # actionDrawEllipse
 wa push 0x0910b9f0; so+1 # actionDrawLine
+wa push 0x08ff5b20; so+1 # actionDrawSpriteGeneral
 wa push 0x0910ae40; so+1 # actionDrawSetAlpha
 wa push 0x0910b080; so+1 # actionDrawGetAlpha
 wa push 0x0921a520; so+1 # actionEventPerform
@@ -264,7 +265,7 @@ wa push 0x09aa7fe0; so+1 # maps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 55; so+1
+wa add esp, 4 * 56; so+1
 # Exit thunk.
 wa jmp 0x011cb944
 
