@@ -501,5 +501,57 @@ wa call 0x00f88140; so+1 # saveMapSecure
 wa jmp 0x00e75d4d;
 
 # Inject call to thunk.
-s 0x0x00e75d48
+s 0x00e75d48
 wa jmp 0x02009300
+
+
+
+# Add mod runtime environment room change hook.
+
+# Add dynamic string.
+s 0x020025d0
+wz AERHookRoomChange
+
+# Add dynamic symbol.
+s 0x00000264+0x10*0x1ae
+wv4 0x000015d0 @+0x00
+wv4 0x0a04d050 @+0x04
+wv4 0x00000000 @+0x08
+wv1 0x12 @+0x0c
+wv1 0x00 @+0x0d
+wv2 0x0000 @+0x0e
+
+# Add PLT relocation table entry.
+s 0x0200b000+0xcf8
+wv4 0x0a04c014 @+0x00
+wv4 0x0001ae00 @+0x04
+wv1 0x07 @+0x04
+
+# Add GOT PLT entry.
+s 0x02004014
+wv4 0x0a04d056
+
+# Add PLT entry.
+s 0x02005050
+# jmp dword [0x0a04c014]
+wx ff 25 14 c0 04 0a
+so+1
+# push 0xcf8
+wx 68 f8 0c 00 00
+so+1
+wa jmp 0x000043f0 # section..plt
+
+# Add breakout thunk.
+s 0x02009400
+# No call setup necessary.
+# Perform call.
+wa call 0x02005050; so+1 # AERHookRoomChange
+# No call cleanup necessary.
+# Perform overwritten code.
+wa call 0x01102690; so+1 # isRoomIndexValid
+# Exit thunk.
+wa jmp 0x0121fe39;
+
+# Inject call to thunk.
+s 0x0121fe34
+wa jmp 0x02009400
