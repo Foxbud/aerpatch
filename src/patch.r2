@@ -506,11 +506,11 @@ wa jmp 0x02009300
 
 
 
-# Add mod runtime environment room change hook.
+# Add mod runtime environment room start hook.
 
 # Add dynamic string.
 s 0x020025d0
-wz AERHookRoomChange
+wz AERHookRoomStart
 
 # Add dynamic symbol.
 s 0x00000264+0x10*0x1ae
@@ -543,9 +543,113 @@ wa jmp 0x000043f0 # section..plt
 
 # Add breakout thunk.
 s 0x02009400
+# Perform overwritten code.
+wa call 0x011d27d0; so+1 # otherEventLoop
 # No call setup necessary.
 # Perform call.
-wa call 0x02005050; so+1 # AERHookRoomChange
+wa call 0x02005050; so+1 # AERHookRoomStart
+# No call cleanup necessary.
+# Exit thunk.
+wa jmp 0x01216671;
+
+# Inject call to thunk.
+s 0x0121666c
+wa jmp 0x02009400
+
+
+
+# Add mod runtime environment room end hook.
+
+# Add dynamic string.
+s 0x020025f0
+wz AERHookRoomEnd
+
+# Add dynamic symbol.
+s 0x00000264+0x10*0x1af
+wv4 0x000015f0 @+0x00
+wv4 0x0a04d060 @+0x04
+wv4 0x00000000 @+0x08
+wv1 0x12 @+0x0c
+wv1 0x00 @+0x0d
+wv2 0x0000 @+0x0e
+
+# Add PLT relocation table entry.
+s 0x0200b000+0xd00
+wv4 0x0a04c018 @+0x00
+wv4 0x0001af00 @+0x04
+wv1 0x07 @+0x04
+
+# Add GOT PLT entry.
+s 0x02004018
+wv4 0x0a04d066
+
+# Add PLT entry.
+s 0x02005060
+# jmp dword [0x0a04c018]
+wx ff 25 18 c0 04 0a
+so+1
+# push 0xd00
+wx 68 00 0d 00 00
+so+1
+wa jmp 0x000043f0 # section..plt
+
+# Add breakout thunk.
+s 0x02009500
+# Perform overwritten code.
+wa call 0x011d27d0; so+1 # otherEventLoop
+# No call setup necessary.
+# Perform call.
+wa call 0x02005060; so+1 # AERHookRoomEnd
+# No call cleanup necessary.
+# Exit thunk.
+wa jmp 0x012167d4;
+
+# Inject call to thunk.
+s 0x012167cf
+wa jmp 0x02009500
+
+
+
+# Add mod runtime environment room change hook.
+
+# Add dynamic string.
+s 0x02002610
+wz AERHookRoomChange
+
+# Add dynamic symbol.
+s 0x00000264+0x10*0x1b0
+wv4 0x00001610 @+0x00
+wv4 0x0a04d070 @+0x04
+wv4 0x00000000 @+0x08
+wv1 0x12 @+0x0c
+wv1 0x00 @+0x0d
+wv2 0x0000 @+0x0e
+
+# Add PLT relocation table entry.
+s 0x0200b000+0xd08
+wv4 0x0a04c01c @+0x00
+wv4 0x0001b000 @+0x04
+wv1 0x07 @+0x04
+
+# Add GOT PLT entry.
+s 0x0200401c
+wv4 0x0a04d076
+
+# Add PLT entry.
+s 0x02005070
+# jmp dword [0x0a04c01c]
+wx ff 25 1c c0 04 0a
+so+1
+# push 0xd08
+wx 68 08 0d 00 00
+so+1
+wa jmp 0x000043f0 # section..plt
+
+# Add breakout thunk.
+s 0x02009600
+# No call setup necessary.
+# Perform call.
+wa call 0x02005070; so+1 # AERHookRoomChange
 # No call cleanup necessary.
 # Perform overwritten code.
 wa call 0x01102690; so+1 # isRoomIndexValid
@@ -554,4 +658,4 @@ wa jmp 0x0121fe39;
 
 # Inject call to thunk.
 s 0x0121fe34
-wa jmp 0x02009400
+wa jmp 0x02009600
