@@ -252,10 +252,10 @@ wa push 0x09aa1d6c; so+1 # fontTable
 wa push 0x098091ac; so+1 # spriteTable
 wa push 0x09ac3638; so+1 # currentRoom
 wa push 0x09ac366c; so+1 # currentRoomIndex
+wa push 0x09abc908; so+1 # roomTable
 wa push 0x09ac36bc; so+1 # currentEventNumber
 wa push 0x09ac36b8; so+1 # currentEventType
 wa push 0x09ac36b4; so+1 # currentEventObject
-wa push 0x09abc908; so+1 # roomTable
 wa push 0x09aa564c; so+1 # mousePosY
 wa push 0x09aa5648; so+1 # mousePosX
 wa push 0x09aa563f; so+1 # mouseButtonsReleasedTable
