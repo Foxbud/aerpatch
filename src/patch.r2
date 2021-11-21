@@ -205,7 +205,6 @@ s 0x02008000
 wx c6 85 57 ff ff ff 00; so+1 # mov dword [ebp+var_a9], 0
 # Setup call.
 # Function references.
-wa push 0x08eb56f0; so+1 # gmlScriptSaveData
 wa push 0x08fa9cd0; so+1 # gmlScriptSetdepth
 wa push 0x08de23b0; so+1 # gmlScriptGoToRoom
 wa push 0x090c01c0; so+1 # API_dsMapAddMap
@@ -268,7 +267,7 @@ wa push 0x09aa7fe0; so+1 # maps
 # Perform call.
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
-wa add esp, 4 * 59; so+1
+wa add esp, 4 * 58; so+1
 # Exit thunk.
 wa jmp 0x011cb944
 
