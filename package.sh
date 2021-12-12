@@ -17,11 +17,11 @@
 
 # Constants.
 
-_POSTREL=""
+_VERSUFFIX=""
 if [ $# -eq 1 ]; then
-	_POSTREL="-$1"
+	_VERSUFFIX="-$1"
 fi
-_VERSION="$(date -u +'%Y%m%d')$_POSTREL"
+_VERSION="$(date -u +'%Y%m%d')$_VERSUFFIX"
 
 _SCRIPT="$(realpath "$0")"
 
