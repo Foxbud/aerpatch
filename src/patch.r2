@@ -201,8 +201,6 @@ wx e9 e0 f3 ff fd
 
 # Add breakout thunk.
 s 0x02008000
-# Perform overwritten code.
-wx c6 85 57 ff ff ff 00; so+1 # mov dword [ebp+var_a9], 0
 # Setup call.
 # Function references.
 wa push 0x08fa9cd0; so+1 # gmlScriptSetdepth
@@ -268,14 +266,14 @@ wa push 0x09aa7fe0; so+1 # maps
 wa call 0x02005000; so+1 # AERHookInit
 # Cleanup call.
 wa add esp, 4 * 58; so+1
+# Perform overwritten code.
+wa call 0x00f88140; so+1 # Instance::FUN_08fd0140
 # Exit thunk.
-wa jmp 0x011cb944
+wa jmp 0x00627169
 
 # Inject call to thunk.
-s 0x011cb93d # Instruction before game loop.
-wa jmp 0x02008000; so+1
-wa nop; so+1
-wa nop
+s 0x00627164
+wa jmp 0x02008000
 
 
 
@@ -544,12 +542,12 @@ wa jmp 0x000043f0 # section..plt
 
 # Add breakout thunk.
 s 0x02009400
-# Perform overwritten code.
-wa call 0x011d27d0; so+1 # otherEventLoop
 # No call setup necessary.
 # Perform call.
 wa call 0x02005050; so+1 # AERHookRoomStart
 # No call cleanup necessary.
+# Perform overwritten code.
+wa call 0x011d27d0; so+1 # otherEventLoop
 # Exit thunk.
 wa jmp 0x01216671;
 
