@@ -45,6 +45,13 @@ f aer.dstrt @aer.pht+0x1000
 
 
 
+# Macros.
+
+# Fill n bytes at current seek with nop sled to ud2.
+(deadcode n; b $0-2; wb 90; wa ud2 @+$0-2; s+$0)
+
+
+
 # Move the program header table.
 
 # Move program header table contents.
@@ -376,6 +383,10 @@ wa call 0x012382e0; so+1 # lookupEventWrapper
 # Exit thunk.
 wa jmp 0x011d21b0
 
+# Inject call to thunk 1.
+s 0x011d21ab
+wa jmp 0x02009100
+
 # Add breakout thunk 2.
 s 0x0200910f
 # No call setup necessary.
@@ -386,10 +397,6 @@ wa call 0x02005020; so+1 # AERHookEvent
 wa call 0x012382e0; so+1 # lookupEventWrapper
 # Exit thunk.
 wa jmp 0x011d22ed
-
-# Inject call to thunk 1.
-s 0x011d21ab
-wa jmp 0x02009100
 
 # Inject call to thunk 2.
 s 0x011d22e8
@@ -658,3 +665,60 @@ wa jmp 0x0121fe39;
 # Inject call to thunk.
 s 0x0121fe34
 wa jmp 0x02009600
+
+
+
+# Add mod runtime environment primitive pointer copy hook.
+
+# Add dynamic string.
+s 0x02002630
+wz AERHookPrimitivePointerCopy
+
+# Add dynamic symbol.
+s 0x00000264+0x10*0x1b1
+wv4 0x00001630 @+0x00
+wv4 0x0a04d080 @+0x04
+wv4 0x00000000 @+0x08
+wv1 0x12 @+0x0c
+wv1 0x00 @+0x0d
+wv2 0x0000 @+0x0e
+
+# Add PLT relocation table entry.
+s 0x0200b000+0xd10
+wv4 0x0a04c020 @+0x00
+wv4 0x0001b100 @+0x04
+wv1 0x07 @+0x04
+
+# Add GOT PLT entry.
+s 0x02004020
+wv4 0x0a04d086
+
+# Add PLT entry.
+s 0x02005080
+# jmp dword [0x0a04c020]
+wx ff 25 20 c0 04 0a
+so+1
+# push 0xd10
+wx 68 10 0d 00 00
+so+1
+wa jmp 0x000043f0 # section..plt
+
+# Add breakout thunk 1.
+s 0x02009700
+# Setup call.
+wa push dword [ebp-0x1c]; so+1
+wa push dword [ebp-0x18]; so+1
+# Perform call.
+wa call 0x02005080; so+1 # AERHookPrimitivePointerCopy
+# Cleanup call.
+wa add esp, 4 * 2; so+1
+# No overwritten code.
+# Exit thunk.
+wa jmp 0x00f97a1e
+
+# Redirect switch case to thunk 1.
+s 0x0143f504
+wv4 0x0a051700
+# Disable original switch case handler.
+s 0x00f979df
+.(deadcode 15)
