@@ -47,8 +47,8 @@ f aer.dstrt @aer.pht+0x1000
 
 # Macros.
 
-# Fill n bytes at current seek with nop sled to ud2.
-(deadcode n; b $0-2; wb 90; wa ud2 @+$0-2; s+$0)
+# Fill n bytes at current seek with nop ramp to ud2.
+(rampill n; wa nop @@s:$$ $$+$0-2 1; wa ud2 @+$0-2)
 
 
 
@@ -703,22 +703,15 @@ wx 68 10 0d 00 00
 so+1
 wa jmp 0x000043f0 # section..plt
 
-# Add breakout thunk 1.
-s 0x02009700
-# Setup call.
-wa push dword [ebp-0x1c]; so+1
-wa push dword [ebp-0x18]; so+1
-# Perform call.
-wa call 0x02005080; so+1 # AERHookPrimitivePointerCopy
-# Cleanup call.
-wa add esp, 4 * 2; so+1
-# No overwritten code.
-# Exit thunk.
-wa jmp 0x00f97a1e
+# Define temporary thunk macro for hijacking switch cases.
+(hijack entry; fs+self; f self 19; f self.old 4 @[$0-voff]-voff; wa push dword [ebp`?vi1 [self.old+2]`]; wa push dword [ebp`?vi1 [self.old+7]`] @i:1; wa call 0x02005080 @i:2; wa add esp, 4*2 @i:3; wa jmp `?v $j @self.old+10` @i:4; .(rampill 15) @self.old; wv4 self+voff @$0-voff; fs-.)
 
-# Redirect switch case to thunk 1.
-s 0x0143f504
-wv4 0x0a051700
-# Disable original switch case handler.
-s 0x00f979df
-.(deadcode 15)
+s 0x02009700; b 19
+
+# Primitive::copyArrayIndex thunks.
+.(hijack 0x09487504); s++
+.(hijack 0x094874c8); s++
+.(hijack 0x09487540); s++
+
+# Undefine temporary thunk macro.
+(-hijack)
